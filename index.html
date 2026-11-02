@@ -7,8 +7,22 @@
   <link rel="icon" type="image/svg+xml" href="assets/omniguard-mark.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/omniguard-32.png">
   <link rel="apple-touch-icon" href="assets/omniguard-256.png">
-  <meta property="og:image" content="assets/omniguard-banner.png">
+  <link rel="canonical" href="https://omniguard-wiki.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="OmniGuard">
+  <meta property="og:title" content="OmniGuard — Minecraft server security">
+  <meta property="og:description" content="Anti-crash, real dupe detection, lag-machine shield and anti-bot in one plugin. 37/37 exploits blocked, 0 false positives. Paper, Purpur, Spigot, Folia 1.17–26.2.">
+  <meta property="og:url" content="https://omniguard-wiki.pages.dev/">
+  <meta property="og:image" content="https://omniguard-wiki.pages.dev/assets/omniguard-og.jpg">
+  <meta property="og:image:secure_url" content="https://omniguard-wiki.pages.dev/assets/omniguard-og.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="OmniGuard: Minecraft server security">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OmniGuard — Minecraft server security">
+  <meta name="twitter:description" content="Anti-crash, real dupe detection, lag-machine shield and anti-bot in one plugin. 37/37 exploits blocked, 0 false positives. Paper, Purpur, Spigot, Folia 1.17–26.2.">
+  <meta name="twitter:image" content="https://omniguard-wiki.pages.dev/assets/omniguard-og.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +40,7 @@
   <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
 
   <title data-i18n="meta.title">OmniGuard — Minecraft server security: anti-crash, real dupe detection, anti-lag, anti-bot</title>
-  <meta name="description" data-i18n-content="meta.desc" content="One plugin, five layers: packet firewall, Item Provenance Ledger dupe detection, lag-machine shield, bot-flood protection and server hardening. Paper, Purpur, Spigot and Folia 1.17–26.x.">
+  <meta name="description" data-i18n-content="meta.desc" content="One plugin, five layers: packet firewall, Item Provenance Ledger dupe detection, lag-machine shield, bot-flood protection and server hardening. Paper, Purpur, Spigot and Folia 1.17–26.2.">
 </head>
 <body data-root="">
 <header class="topbar">
@@ -73,7 +87,7 @@
       </div>
       <div class="hero-meta">
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span data-i18n="hero.m1">Paper · Purpur · Spigot · Folia</span></span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span data-i18n="hero.m2">1.17.1 → 26.x</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span data-i18n="hero.m2">1.17.1 → 26.2</span></span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span data-i18n="hero.m3">Geyser / Bedrock ready</span></span>
       </div>
     </div>
@@ -210,7 +224,7 @@ detail : book too large (412008 > 320000 bytes)
   <div class="eyebrow" data-i18n="p.eyebrow">Runs where you run</div>
   <h2 data-i18n="p.title">Tested on every platform, every release.</h2>
   <p class="sub" data-i18n="p.sub">Folia support is real: all world access goes through region and entity schedulers, and dupe verification double-checks across threads.</p>
-  <div class="platforms reveal"><span>Paper 1.17.1</span><span>Paper 1.20.4</span><span>Paper 1.21.11</span><span>Paper 26.1</span><span>Folia 1.21.11</span><span>Folia 26.1</span><span>Purpur</span><span>Spigot</span><span>Geyser / Floodgate</span><span>ViaVersion</span><span data-i18n="nav.placeholders">PlaceholderAPI</span></div>
+  <div class="platforms reveal"><span>Paper 1.17.1</span><span>Paper 1.20.4</span><span>Paper 1.21.11</span><span>Paper 26.1</span><span>Paper 26.2</span><span>Folia 1.21.11</span><span>Folia 26.1</span><span>Folia 26.2</span><span>Purpur 26.2</span><span>Purpur</span><span>Spigot</span><span>Geyser / Floodgate</span><span>ViaVersion</span><span data-i18n="nav.placeholders">PlaceholderAPI</span></div>
 </section>
 
 <section class="block">
@@ -219,7 +233,7 @@ detail : book too large (412008 > 320000 bytes)
   <div class="faq">
     <details class="reveal"><summary data-i18n="q1.q">Does OmniGuard replace my anticheat?</summary><p data-i18n="q1.a">No. OmniGuard protects the <em>server</em>: crashes, dupes, lag, floods and takeovers. Run it next to your anticheat. Anticheats can even report their detections into OmniGuard's alerts and Discord through the API.</p></details>
     <details class="reveal"><summary data-i18n="q2.q">Ten people play from my house. Will they be kicked?</summary><p data-i18n="q2.a">No. IPs that real players joined from are trusted: they get five times the limits and are never blocked. A whole IP is only blocked for an unmistakable flood. The test suite includes exactly this scenario.</p></details>
-    <details class="reveal"><summary data-i18n="q3.q">What does it need?</summary><p data-i18n="q3.a">Java 17+, a Paper, Purpur, Spigot or Folia server from 1.17.1 to 26.x, and the free <a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> plugin.</p></details>
+    <details class="reveal"><summary data-i18n="q3.q">What does it need?</summary><p data-i18n="q3.a">Java 17+, a Paper, Purpur, Spigot or Folia server from 1.17.1 to 26.2, and the free <a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> plugin.</p></details>
     <details class="reveal"><summary data-i18n="q4.q">Can I try it without risk?</summary><p data-i18n="q4.a">Yes. Turn on <code>monitor-mode</code> and OmniGuard detects and alerts on everything without blocking anything. Run <code>/og doctor</code> for a configuration check-up.</p></details>
     <details class="reveal"><summary data-i18n="q5.q">I am behind BungeeCord or Velocity.</summary><p data-i18n="q5.a">It is detected automatically. Per-IP connection limits step aside, because all traffic comes from the proxy. Everything else keeps working with the forwarded player IPs.</p></details>
   </div>
