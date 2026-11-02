@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Connection shield · OmniGuard Docs</title>
+  <meta name="description" content="Connection shield Built for shared IPs One IP is very often many real people: a family, a school, an internet café, or a mobile carrier that puts thousands">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html" class="active">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="connection-shield">Connection shield<a class="anchor" href="#connection-shield" title="Permanent link">#</a></h1>
+<h2 id="built-for-shared-ips">Built for shared IPs<a class="anchor" href="#built-for-shared-ips" title="Permanent link">#</a></h2>
+<p>One IP is very often many real people: a family, a school, an internet café, or a mobile carrier that puts
+thousands of customers behind one address (CGNAT). OmniGuard therefore follows four rules:</p>
+<ol>
+<li><strong>Trusted IPs.</strong> Once a real player completes a join from an IP, that IP is trusted. It gets
+   <code>trusted-multiplier</code> (5×) more connections and logins, it is never blocked, and attack mode never tightens it.</li>
+<li><strong>Refuse, do not block.</strong> Connections above the limit are refused one by one. A whole IP is blocked only after
+   <code>block-after-refusals</code> (40) refusals within 10 seconds, which only a flood produces.</li>
+<li><strong>No account caps on trusted IPs.</strong> <code>max-accounts-per-ip</code> is <code>0</code> (off) by default. During attack mode,
+   <code>attack-max-accounts-per-ip</code> applies to <strong>untrusted</strong> IPs only.</li>
+<li><strong>Never limit what is not a person.</strong> Unknown addresses and <code>127.0.0.1</code> / <code>::1</code> (Geyser, local proxies) are never limited.</li>
+</ol>
+<p>This behaviour is covered by the test suite. For example, 10 players on one IP refresh the server list and join
+together, and all of them get in without a single alert.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connection-flood</code></td>
+<td>Per-IP connections at the Netty level; floods are blocked for 60 s</td>
+</tr>
+<tr>
+<td><code>login-guard</code></td>
+<td>Username pattern (offline-mode servers only, Bedrock prefixes allowed), per-IP login rate, accounts per IP during attacks, <strong>rejoin cycling</strong> (8 completed joins/60 s per account)</td>
+</tr>
+<tr>
+<td><code>alt-link</code></td>
+<td>Links accounts that share IPs and alerts when a <strong>new</strong> account joins from an IP that a <strong>banned</strong> account used</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="attack-mode">Attack mode<a class="anchor" href="#attack-mode" title="Permanent link">#</a></h2>
+<p>When connections/s, logins/s or blocked packets/s stay above <code>attack-mode</code> thresholds for <code>trigger-seconds</code>,
+OmniGuard:</p>
+<ul>
+<li>multiplies connection and login limits by <code>limit-multiplier</code>;</li>
+<li>asks <strong>unknown</strong> IPs to reconnect once (between <code>reconnect-min-seconds</code> and <code>reconnect-max-seconds</code>). Real players
+  pass, bots usually do not. IPs that joined before are never asked;</li>
+<li>groups refusal alerts into a single summary when the attack ends (<code>Attack mode ended after 32s, refused N connections and M logins</code>).</li>
+</ul>
+<p>Force it with <code>/og attackmode on|off|auto</code>.</p>
+<h2 id="lockdown">Lockdown<a class="anchor" href="#lockdown" title="Permanent link">#</a></h2>
+<p><code>/og lockdown on</code> lets only already-verified IPs in. Use it while dealing with a raid or a grief wave. The setting is
+saved in <code>state.yml</code> and survives restarts.</p>
+<h2 id="ban-evasion">Ban evasion<a class="anchor" href="#ban-evasion" title="Permanent link">#</a></h2>
+<p><code>/og alts &lt;player&gt;</code> shows every linked account; punished ones are red. Only <strong>new</strong> accounts (never seen before)
+on an IP that a currently <strong>banned</strong> account used are flagged. Siblings who have played for months, and accounts that
+were only kicked, are not evaders. <code>alt-link.block-evasion: true</code> also refuses such logins. It is off by default
+because families and schools share IPs.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="world-shield.html"><small>Previous</small>World shield</a><a class="pn next" href="hardening.html"><small>Next</small>Server hardening</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#built-for-shared-ips">Built for shared IPs</a><a href="#attack-mode">Attack mode</a><a href="#lockdown">Lockdown</a><a href="#ban-evasion">Ban evasion</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

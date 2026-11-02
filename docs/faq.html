@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>FAQ &amp; troubleshooting · OmniGuard Docs</title>
+  <meta name="description" content="FAQ &amp; troubleshooting Does it replace my anticheat? No. OmniGuard protects the server (crashes, dupes, lag, floods, takeovers). Run it next to an anticheat">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html" class="active">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="faq-troubleshooting">FAQ &amp; troubleshooting<a class="anchor" href="#faq-troubleshooting" title="Permanent link">#</a></h1>
+<p><strong>Does it replace my anticheat?</strong>
+No. OmniGuard protects the <em>server</em> (crashes, dupes, lag, floods, takeovers). Run it next to an anticheat. Anticheats can
+feed their detections into OmniGuard with <code>reportViolation</code>.</p>
+<p><strong>A legitimate player was flagged.</strong>
+Run <code>/og inspect &lt;player&gt;</code> and look at <code>forensics/</code> if they were kicked. Raise that check's limit, or switch it to <code>cancel: true</code>,
+<code>kick: false</code> while you investigate. For packet rates, let <a href="auto-tune.html">Auto-Tune</a> learn your real traffic.</p>
+<p><strong>Players with inventory mods (Item Scroller, mouse tweaks) get click-rate alerts.</strong>
+Raise <code>packet-rate.limits.CLICK_WINDOW</code> (the burst matters most), e.g. <code>"80/s burst 800"</code>.</p>
+<p><strong>Kits trigger dupe alerts.</strong>
+The kit hands out copies of one saved, tracked item. After 3 different holders OmniGuard recognises it as a template
+and goes quiet. You can also run <code>/og ledger ignore &lt;uid&gt;</code> (the uid is shown in the alert).</p>
+<p><strong>Ten people play from one house / a school / an internet café.</strong>
+Supported by design: see <a href="connection.html">Built for shared IPs</a>. Nobody is limited for sharing an IP.</p>
+<p><strong>Bedrock players (Geyser/Floodgate)?</strong>
+Supported: prefixed names are accepted and translated inputs are not judged by Java-only rules.</p>
+<p><strong>"PacketEvents" is missing at startup.</strong>
+OmniGuard needs the free <a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> plugin. Put both jars in <code>plugins/</code> and restart.</p>
+<p><strong>I run BungeeCord/Velocity.</strong>
+Leave <code>behind-proxy: auto</code>. Per-IP connection limits switch off; the proxy should run its own antibot.</p>
+<p><strong>Alerts look garbled in the console.</strong>
+They are ASCII-safe since 1.0.0. Check your console's charset if colors leak.</p>
+<p><strong>Folia?</strong>
+Fully supported: all world work goes through region and entity schedulers. <code>/og lag</code> is unavailable because Folia has no
+global chunk view.</p>
+<p><strong>Performance?</strong>
+Packet checks are lock-free and only decode packets of the types that are checked. World checks are O(1) per event,
+and ledger scans are spread over time. Profile with <code>/spark</code> on your own server if you need numbers.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="api.html"><small>Previous</small>Developer API</a><a class="pn next" href="testing.html"><small>Next</small>Test results</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

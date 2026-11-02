@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Configuration · OmniGuard Docs</title>
+  <meta name="description" content="Configuration Everything lives in plugins/OmniGuard/config.yml . OmniGuard never rewrites this file; in-game changes go to state.yml . How a check decides ">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html" class="active">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="configuration">Configuration<a class="anchor" href="#configuration" title="Permanent link">#</a></h1>
+<p>Everything lives in <code>plugins/OmniGuard/config.yml</code>. OmniGuard never rewrites this file; in-game changes go to <code>state.yml</code>.</p>
+<h2 id="how-a-check-decides">How a check decides<a class="anchor" href="#how-a-check-decides" title="Permanent link">#</a></h2>
+<p>Every detection adds to the player's <strong>violation level (VL)</strong> for that check. The VL cools down by
+<code>decay-per-second</code>.</p>
+<div class="hl"><pre><span></span><code><span class="nt">checks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">book</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># run the check at all</span>
+<span class="w">    </span><span class="nt">cancel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">           </span><span class="c1"># drop the packet / action (false = observe only)</span>
+<span class="w">    </span><span class="nt">alert-vl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w">            </span><span class="c1"># alert staff from this VL on</span>
+<span class="w">    </span><span class="nt">max-vl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">              </span><span class="c1"># punish at this VL</span>
+<span class="w">    </span><span class="nt">decay-per-second</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.02</span>
+<span class="w">    </span><span class="nt">kick</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">             </span><span class="c1"># kick at max-vl</span>
+<span class="w">    </span><span class="nt">instant-kick</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">     </span><span class="c1"># kick immediately for payloads only a crash client can send</span>
+<span class="w">    </span><span class="nt">commands</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w">           </span><span class="c1"># console commands run at max-vl</span>
+</code></pre></div>
+
+<p>Placeholders for <code>commands</code>: <code>%player% %uuid% %ip% %check% %vl% %detail%</code>. <code>%detail%</code> is cleaned of anything
+that could inject arguments.</p>
+<div class="hl"><pre><span></span><code><span class="w">    </span><span class="nt">commands</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"litebans:tempban</span><span class="nv"> </span><span class="s">%player%</span><span class="nv"> </span><span class="s">1d</span><span class="nv"> </span><span class="s">Crash</span><span class="nv"> </span><span class="s">attempt</span><span class="nv"> </span><span class="s">(%check%)"</span>
+</code></pre></div>
+
+<h2 id="rate-syntax">Rate syntax<a class="anchor" href="#rate-syntax" title="Permanent link">#</a></h2>
+<p>Rates are written as <code>"&lt;per second&gt;/s burst &lt;burst&gt;"</code>, e.g. <code>"60/s burst 200"</code>. <code>"40/120"</code> and <code>"40/s"</code> also work
+(the burst defaults to twice the rate).</p>
+<h2 id="safety-nets">Safety nets<a class="anchor" href="#safety-nets" title="Permanent link">#</a></h2>
+<ul>
+<li><strong>Typos never disable protection.</strong> A wrong value is replaced by the default and reported in the console and by <code>/og reload</code>.</li>
+<li><strong>Monitor mode</strong> (<code>monitor-mode: true</code> or <code>/og monitor on</code>): everything is detected and alerted, nothing is blocked.</li>
+<li><strong>Bypass</strong>: <code>omniguard.bypass</code> (everything) or <code>omniguard.bypass.&lt;check-id&gt;</code>.</li>
+</ul>
+<h2 id="global-sections">Global sections<a class="anchor" href="#global-sections" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alerts</code></td>
+<td>Console / staff / file log, alert cooldown</td>
+</tr>
+<tr>
+<td><code>discord</code></td>
+<td>Webhook, categories, attack-mode posts, role ping</td>
+</tr>
+<tr>
+<td><code>punishment</code></td>
+<td>Kick message, instant close</td>
+</tr>
+<tr>
+<td><code>attack-mode</code></td>
+<td>Thresholds and the limit multiplier during floods</td>
+</tr>
+<tr>
+<td><code>world-shield</code></td>
+<td>TPS threshold and multiplier for lag-machine limits</td>
+</tr>
+<tr>
+<td><code>forensics</code></td>
+<td>Evidence files on punishment</td>
+</tr>
+<tr>
+<td><code>auto-tune</code></td>
+<td>Learning requirements</td>
+</tr>
+<tr>
+<td><code>daily-report</code></td>
+<td>Daily summary file / Discord</td>
+</tr>
+</tbody>
+</table></div>
+    </article>
+    <nav class="pager"><a class="pn prev" href="installation.html"><small>Previous</small>Installation</a><a class="pn next" href="commands.html"><small>Next</small>Commands & permissions</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#how-a-check-decides">How a check decides</a><a href="#rate-syntax">Rate syntax</a><a href="#safety-nets">Safety nets</a><a href="#global-sections">Global sections</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

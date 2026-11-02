@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>All checks · OmniGuard Docs</title>
+  <meta name="description" content="All checks OmniGuard ships 35 checks . Each one is configured under checks.&lt;id&gt; and can be bypassed with omniguard.bypass.&lt;id&gt; . Common keys: enabled , can">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html" class="active">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="all-checks">All checks<a class="anchor" href="#all-checks" title="Permanent link">#</a></h1>
+<p>OmniGuard ships <strong>35 checks</strong>. Each one is configured under <code>checks.&lt;id&gt;</code> and can be bypassed with <code>omniguard.bypass.&lt;id&gt;</code>. Common keys: <code>enabled</code>, <code>cancel</code>, <code>alert-vl</code>, <code>max-vl</code>, <code>decay-per-second</code>, <code>kick</code>, <code>instant-kick</code>, <code>commands</code> (see <a href="configuration.html">Configuration</a>).</p>
+<blockquote class="callout note">
+<p>This table is generated from the source code, so it always matches the shipped version.</p>
+</blockquote>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Check id</th>
+<th>Layer</th>
+<th>Protects against</th>
+<th>Default kick</th>
+<th>Specific settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frame-guard</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Netty frame / byte flood</td>
+<td>instant</td>
+<td><code>play-frames</code>, <code>play-bytes</code>, <code>pre-play-frames</code>, <code>pre-play-bytes</code>, <code>max-frame-bytes</code>, <code>max-pre-play-frame-bytes</code></td>
+</tr>
+<tr>
+<td><code>connection-flood</code></td>
+<td><span class="badge b-conn">Connection</span></td>
+<td>Connection flood per IP</td>
+<td>no</td>
+<td><code>per-ip</code>, <code>trusted-multiplier</code>, <code>block-after-refusals</code>, <code>block-seconds</code>, <code>behind-proxy</code>, <code>whitelist</code></td>
+</tr>
+<tr>
+<td><code>packet-rate</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Packet rate limiter</td>
+<td>at max-vl</td>
+<td><code>global</code>, <code>limits</code>, <code>configuration</code></td>
+</tr>
+<tr>
+<td><code>packet-size</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Oversized packet</td>
+<td>instant</td>
+<td><code>limits</code></td>
+</tr>
+<tr>
+<td><code>malformed-packet</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Malformed packet</td>
+<td>at max-vl</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>invalid-movement</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Invalid movement / position crash</td>
+<td>instant</td>
+<td><code>strict-pitch</code>, <code>max-move-per-packet</code></td>
+</tr>
+<tr>
+<td><code>book</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Book exploit</td>
+<td>instant</td>
+<td><code>max-pages</code>, <code>max-page-chars</code>, <code>max-title-chars</code>, <code>max-total-bytes</code></td>
+</tr>
+<tr>
+<td><code>sign</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Sign exploit</td>
+<td>at max-vl</td>
+<td><code>max-line-chars</code>, <code>max-lines</code></td>
+</tr>
+<tr>
+<td><code>window-click</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Invalid inventory click</td>
+<td>at max-vl</td>
+<td><code>max-changed-slots</code></td>
+</tr>
+<tr>
+<td><code>creative</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Creative item exploit</td>
+<td>at max-vl</td>
+<td><code>require-creative-mode</code>, <code>max-item-bytes</code>, <code>max-stack-size</code></td>
+</tr>
+<tr>
+<td><code>tab-complete</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Tab-complete crash</td>
+<td>at max-vl</td>
+<td><code>max-length</code>, <code>max-nesting-depth</code>, <code>max-selectors</code></td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Crash / exploit command</td>
+<td>no</td>
+<td><code>max-length</code>, <code>max-nesting-depth</code>, <code>blocked-patterns</code></td>
+</tr>
+<tr>
+<td><code>chat</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Chat exploit</td>
+<td>at max-vl</td>
+<td><code>max-length</code></td>
+</tr>
+<tr>
+<td><code>plugin-message</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Plugin channel abuse</td>
+<td>at max-vl</td>
+<td><code>max-channel-length</code>, <code>max-registered-channels</code>, <code>max-brand-length</code>, <code>blocked-channels</code></td>
+</tr>
+<tr>
+<td><code>anvil</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Anvil rename exploit</td>
+<td>at max-vl</td>
+<td><code>max-length</code></td>
+</tr>
+<tr>
+<td><code>invalid-slot</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Out-of-range slot index</td>
+<td>instant</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>admin-packet</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Unauthorized admin packet</td>
+<td>no</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Interaction / reach exploit</td>
+<td>at max-vl</td>
+<td><code>max-distance</code>, <code>block-self-interact</code></td>
+</tr>
+<tr>
+<td><code>client-settings</code></td>
+<td><span class="badge b-packet">Packet</span></td>
+<td>Invalid client settings</td>
+<td>at max-vl</td>
+<td><code>max-locale-length</code></td>
+</tr>
+<tr>
+<td><code>item-ledger</code></td>
+<td><span class="badge b-dupe">Dupe</span></td>
+<td>Duplicated item (provenance ledger)</td>
+<td>no</td>
+<td><code>action</code>, <code>tracked-items</code>, <code>track-unstackable-enchanted</code>, <code>scan-interval-seconds</code>, <code>ignore-creative</code>, <code>custody-depth</code>, <code>template-threshold</code>, <code>ignore-worlds</code></td>
+</tr>
+<tr>
+<td><code>gain-monitor</code></td>
+<td><span class="badge b-dupe">Dupe</span></td>
+<td>Abnormal item gain</td>
+<td>no</td>
+<td><code>window-seconds</code>, <code>thresholds</code></td>
+</tr>
+<tr>
+<td><code>dupe-patches</code></td>
+<td><span class="badge b-dupe">Dupe</span></td>
+<td>Known dupe vector</td>
+<td>no</td>
+<td><code>block-inventory-entities-in-portals</code>, <code>close-inventories-safely</code>, <code>block-dead-player-actions</code>, <code>max-drops-per-second</code></td>
+</tr>
+<tr>
+<td><code>redstone</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Redstone clock / lag machine</td>
+<td>no</td>
+<td><code>max-updates-per-chunk</code>, <code>throttle-seconds</code>, <code>action</code></td>
+</tr>
+<tr>
+<td><code>piston</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Piston flood</td>
+<td>no</td>
+<td><code>max-per-chunk-per-second</code>, <code>throttle-seconds</code></td>
+</tr>
+<tr>
+<td><code>entity-cap</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Entity cap per chunk</td>
+<td>no</td>
+<td><code>limits</code>, <code>ignore-spawn-reasons</code></td>
+</tr>
+<tr>
+<td><code>explosion</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Explosion flood</td>
+<td>no</td>
+<td><code>max-per-chunk-per-second</code></td>
+</tr>
+<tr>
+<td><code>chunk-ban</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Chunk / book ban</td>
+<td>no</td>
+<td><code>max-container-bytes</code>, <code>max-player-inventory-bytes</code>, <code>max-item-bytes</code>, <code>max-lectern-book-bytes</code></td>
+</tr>
+<tr>
+<td><code>hopper</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Hopper lag machine</td>
+<td>no</td>
+<td><code>max-moves-per-chunk</code>, <code>throttle-seconds</code></td>
+</tr>
+<tr>
+<td><code>login-guard</code></td>
+<td><span class="badge b-conn">Connection</span></td>
+<td>Bot join flood</td>
+<td>no</td>
+<td><code>name-pattern</code>, <code>bedrock-prefixes</code>, <code>max-rejoins</code>, <code>rejoin-window-seconds</code>, <code>max-accounts-per-ip</code>, <code>attack-max-accounts-per-ip</code>, <code>per-ip</code>, <code>reconnect-min-seconds</code>, <code>reconnect-max-seconds</code>, <code>whitelist</code></td>
+</tr>
+<tr>
+<td><code>alt-link</code></td>
+<td><span class="badge b-conn">Connection</span></td>
+<td>Ban evasion / linked account</td>
+<td>no</td>
+<td><code>block-evasion</code></td>
+</tr>
+<tr>
+<td><code>privilege-guard</code></td>
+<td><span class="badge b-server">Server</span></td>
+<td>Untrusted operator / creative</td>
+<td>no</td>
+<td><code>trusted-operators</code>, <code>enforce-creative</code></td>
+</tr>
+<tr>
+<td><code>illegal-items</code></td>
+<td><span class="badge b-dupe">Dupe</span></td>
+<td>Illegal item (enchant / stack / unbreakable)</td>
+<td>no</td>
+<td><code>fix</code>, <code>max-enchant-level</code>, <code>ignore-plugin-items</code>, <code>allow-unbreakable</code>, <code>check-stack-size</code>, <code>ignore-creative</code></td>
+</tr>
+<tr>
+<td><code>fingerprint</code></td>
+<td><span class="badge b-server">Server</span></td>
+<td>Plugin fingerprinting command</td>
+<td>no</td>
+<td><code>blocked-commands</code>, <code>blocked-namespaces</code></td>
+</tr>
+<tr>
+<td><code>chunk-gen</code></td>
+<td><span class="badge b-world">World</span></td>
+<td>Chunk generation flood</td>
+<td>no</td>
+<td><code>max-new-chunks-per-second</code>, <code>pause-seconds</code></td>
+</tr>
+<tr>
+<td><code>external</code></td>
+<td><span class="badge b-server">Server</span></td>
+<td>Reported by another plugin (API)</td>
+<td>no</td>
+<td>—</td>
+</tr>
+</tbody>
+</table></div>
+    </article>
+    <nav class="pager"><a class="pn prev" href="commands.html"><small>Previous</small>Commands & permissions</a><a class="pn next" href="packet-firewall.html"><small>Next</small>Packet firewall</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

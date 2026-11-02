@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Packet firewall · OmniGuard Docs</title>
+  <meta name="description" content="Packet firewall Runs on Netty event loops through a shaded PacketEvents listener. Nothing here touches the world, so it is lock-free and Folia-safe. Layers">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html" class="active">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="packet-firewall">Packet firewall<a class="anchor" href="#packet-firewall" title="Permanent link">#</a></h1>
+<p>Runs on Netty event loops through a shaded PacketEvents listener. Nothing here touches the world, so it is
+lock-free and Folia-safe.</p>
+<h2 id="layers">Layers<a class="anchor" href="#layers" title="Permanent link">#</a></h2>
+<ol>
+<li><strong>Frame guard</strong> (<code>frame-guard</code>): a Netty handler right after Minecraft's frame splitter. It counts frames and bytes per
+   connection, separately for pre-play (handshake/status/login) and play. A flood is cut off <strong>before any packet is decoded</strong>,
+   and the IP is blocked for <code>connection-flood.block-seconds</code>.</li>
+<li><strong>Connection flood</strong> (<code>connection-flood</code>): connections (including server-list pings) per IP.</li>
+<li><strong>Rate</strong> (<code>packet-rate</code>): a token bucket per packet type plus a global bucket per player.</li>
+<li><strong>Size</strong> (<code>packet-size</code>): decoded body size per packet type.</li>
+<li><strong>Content checks</strong>: decode the packet and validate it.</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Examples of what is refused</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>invalid-movement</code></td>
+<td>NaN/∞ coordinates, outside ±30 000 000, impossible pitch, &gt;160 blocks in one packet without a teleport</td>
+</tr>
+<tr>
+<td><code>book</code></td>
+<td>&gt;100 pages, &gt;1024 chars/page, books larger than any vanilla book can be, impossible slots. Long books in any language are fine; book <em>bans</em> built from many books are stopped by <code>chunk-ban</code></td>
+</tr>
+<tr>
+<td><code>sign</code>, <code>anvil</code>, <code>chat</code></td>
+<td>Over-long text, control characters, formatting-code injection</td>
+</tr>
+<tr>
+<td><code>window-click</code></td>
+<td>Mode/button combinations no client produces, slots out of range, &gt;128 changed slots</td>
+</tr>
+<tr>
+<td><code>creative</code></td>
+<td>Creative packets outside creative, &gt;64 KB items, stack &gt;99</td>
+</tr>
+<tr>
+<td><code>tab-complete</code>, <code>command</code></td>
+<td>Nested selector bombs, WorldEdit <code>//calc</code>, Multiverse ReDoS, HolographicDisplays path traversal (regex list; operators exempt from the list)</td>
+</tr>
+<tr>
+<td><code>plugin-message</code></td>
+<td>Long channel names, &gt;128 registered channels, legacy exploit channels</td>
+</tr>
+<tr>
+<td><code>invalid-slot</code></td>
+<td>Hotbar slot ∉ 0–8, bundle/pick indexes out of range</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>Self-attack, impossible interaction points, digging/placing far from the player (forced chunk loads)</td>
+</tr>
+<tr>
+<td><code>admin-packet</code></td>
+<td>Command/structure/jigsaw/test blocks, game rules or difficulty from non-ops</td>
+</tr>
+<tr>
+<td><code>malformed-packet</code></td>
+<td>Anything that cannot be decoded is always dropped</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="teleport-awareness">Teleport awareness<a class="anchor" href="#teleport-awareness" title="Permanent link">#</a></h2>
+<p>Movement and distance checks follow the server's teleports (including relative ones), so ender pearls, <code>/tp</code>, respawns and
+world changes never produce false positives.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="checks.html"><small>Previous</small>All checks</a><a class="pn next" href="item-ledger.html"><small>Next</small>Item Ledger & anti-dupe</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#layers">Layers</a><a href="#teleport-awareness">Teleport awareness</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

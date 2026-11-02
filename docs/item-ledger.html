@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Item Ledger &amp; anti-dupe · OmniGuard Docs</title>
+  <meta name="description" content="Item Ledger &amp; anti-dupe How the ledger works Identity. Valuable unstackable items (elytra, totems, tridents, maces, netherite gear, and every enchanted uns">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html" class="active">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="item-ledger-anti-dupe">Item Ledger &amp; anti-dupe<a class="anchor" href="#item-ledger-anti-dupe" title="Permanent link">#</a></h1>
+<h2 id="how-the-ledger-works">How the ledger works<a class="anchor" href="#how-the-ledger-works" title="Permanent link">#</a></h2>
+<ol>
+<li><strong>Identity.</strong> Valuable unstackable items (elytra, totems, tridents, maces, netherite gear, and every enchanted unstackable
+   item by default) get a random UUID in their persistent data. Players cannot see it, and stacking is unaffected.</li>
+<li><strong>Sightings.</strong> Online inventories, ender chests, cursors and the contents of shulkers and bundles are scanned in the
+   background, spread over <code>scan-interval-seconds</code>. Containers are scanned when opened and closed.</li>
+<li><strong>Detection.</strong>
+   - The same identity <strong>twice in one holder</strong> is a certain dupe.
+   - The same identity in <strong>two holders</strong> within the window is checked again on each holder's own thread. On Folia
+     this happens twice, one second apart, so an item that is simply being moved never counts as a dupe.</li>
+<li><strong>Action.</strong> <code>ALERT</code> (default) or <code>REMOVE_COPY</code> (confiscates the copy that showed up last).</li>
+</ol>
+<h2 id="chain-of-custody">Chain of custody<a class="anchor" href="#chain-of-custody" title="Permanent link">#</a></h2>
+<p>Each identity remembers its last <code>custody-depth</code> holders. Dupe alerts (in game, log file and Discord) include the
+chain, e.g. <code>player Steve → chest world 10 64 -3 → player Alex</code>. Use <code>/og ledger trace</code> to look at any item.</p>
+<h2 id="creative-and-kits">Creative and kits<a class="anchor" href="#creative-and-kits" title="Permanent link">#</a></h2>
+<p>Items handled by creative-mode players get a fresh identity, so creative cloning is never reported.</p>
+<p>Kit and crate plugins that saved one tracked item hand out identical copies. When the same identity is confirmed
+in <code>template-threshold</code> (3) different holders, OmniGuard treats it as a template: it stops alerting and tells you
+once. <code>/og ledger unignore &lt;uid&gt;</code> reverses that, and <code>/og ledger ignore &lt;uid&gt;</code> does it by hand.</p>
+<h2 id="gain-monitor">Gain monitor<a class="anchor" href="#gain-monitor" title="Permanent link">#</a></h2>
+<p>For stackable valuables (<code>gain-monitor.thresholds</code>), OmniGuard compares inventory + ender chest + shulker contents
+over a window, minus gains that a legitimate source explains: pickups, crafting, furnaces, trades and container
+withdrawals. It is alert-only.</p>
+<h2 id="known-dupe-patches-dupe-patches">Known dupe patches (<code>dupe-patches</code>)<a class="anchor" href="#known-dupe-patches-dupe-patches" title="Permanent link">#</a></h2>
+<ul>
+<li>Inventory entities (chest donkeys, llamas, chest minecarts and boats) cannot go through portals while loaded.</li>
+<li>Inventories close safely on quit, world change, owner death, vehicle break, block break/explosion and chunk unload.</li>
+<li>No inventory actions while dead.</li>
+<li>Drop-spam rate limit.</li>
+</ul>
+<h2 id="illegal-items-illegal-items">Illegal items (<code>illegal-items</code>)<a class="anchor" href="#illegal-items-illegal-items" title="Permanent link">#</a></h2>
+<p>Survival items with enchantments above <code>max-enchant-level</code> (30), stacks larger than allowed, or (optionally)
+unbreakable flags are reported on join, inventory close, container open and pickup. The check is <strong>alert-only by
+default</strong> (<code>fix: false</code>). Items made by plugins (custom name, lore, model data or another plugin's data) are skipped,
+so nothing a server sells is ever changed without the owner deciding so.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="packet-firewall.html"><small>Previous</small>Packet firewall</a><a class="pn next" href="world-shield.html"><small>Next</small>World shield</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#how-the-ledger-works">How the ledger works</a><a href="#chain-of-custody">Chain of custody</a><a href="#creative-and-kits">Creative and kits</a><a href="#gain-monitor">Gain monitor</a><a href="#known-dupe-patches-dupe-patches">Known dupe patches (dupe-patches)</a><a href="#illegal-items-illegal-items">Illegal items (illegal-items)</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>
