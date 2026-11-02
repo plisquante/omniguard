@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Commands &amp; permissions · OmniGuard Docs</title>
+  <meta name="description" content="Commands &amp; permissions /omniguard , alias /og . Players without permission cannot see or tab-complete it. Command Permission Description /og status omnigua">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html" class="active">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="commands-permissions">Commands &amp; permissions<a class="anchor" href="#commands-permissions" title="Permanent link">#</a></h1>
+<p><code>/omniguard</code>, alias <code>/og</code>. Players without permission cannot see or tab-complete it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Permission</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/og status</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Live dashboard: packets/s, blocked/s, kicks, dupes, attack and monitor mode, top checks</td>
+</tr>
+<tr>
+<td><code>/og gui</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Turn every check on or off in-game (stored in <code>state.yml</code>)</td>
+</tr>
+<tr>
+<td><code>/og alerts</code></td>
+<td><code>omniguard.alerts</code></td>
+<td>Toggle your own alerts</td>
+</tr>
+<tr>
+<td><code>/og inspect &lt;player&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Client version, brand, ping, IP, bypasses, current violation levels</td>
+</tr>
+<tr>
+<td><code>/og ledger info</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Identity of the item in your hand</td>
+</tr>
+<tr>
+<td><code>/og ledger trace [uid]</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Chain of custody of an item</td>
+</tr>
+<tr>
+<td><code>/og ledger scan &lt;player&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Scan a player right now</td>
+</tr>
+<tr>
+<td><code>/og ledger ignore &lt;uid&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Ignore an identity (e.g. a kit template)</td>
+</tr>
+<tr>
+<td><code>/og ledger unignore &lt;uid&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Track an ignored identity again</td>
+</tr>
+<tr>
+<td><code>/og tune [apply\|reset]</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Learned packet limits</td>
+</tr>
+<tr>
+<td><code>/og alts &lt;player&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Linked accounts (punished in red)</td>
+</tr>
+<tr>
+<td><code>/og lockdown &lt;on\|off&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Only verified players may join</td>
+</tr>
+<tr>
+<td><code>/og lag</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Heaviest loaded chunks (not on Folia)</td>
+</tr>
+<tr>
+<td><code>/og doctor</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Security check-up of your server configuration</td>
+</tr>
+<tr>
+<td><code>/og monitor &lt;on\|off&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Detect-only mode</td>
+</tr>
+<tr>
+<td><code>/og attackmode &lt;auto\|on\|off&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Force attack mode</td>
+</tr>
+<tr>
+<td><code>/og unblock &lt;ip&gt;</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Lift an IP block and verify the IP</td>
+</tr>
+<tr>
+<td><code>/og reload</code></td>
+<td><code>omniguard.admin</code></td>
+<td>Reload config and messages; lists config problems</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="permissions">Permissions<a class="anchor" href="#permissions" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>omniguard.admin</code></td>
+<td>op</td>
+<td>All commands and the GUI</td>
+</tr>
+<tr>
+<td><code>omniguard.alerts</code></td>
+<td>op</td>
+<td>Receive alerts</td>
+</tr>
+<tr>
+<td><code>omniguard.bypass</code></td>
+<td>false</td>
+<td>Bypass <strong>every</strong> check (never give to players)</td>
+</tr>
+<tr>
+<td><code>omniguard.bypass.&lt;check-id&gt;</code></td>
+<td>false</td>
+<td>Bypass one check</td>
+</tr>
+<tr>
+<td><code>omniguard.fingerprint.bypass</code></td>
+<td>op</td>
+<td>May use <code>/plugins</code>, <code>/version</code>, namespaced commands</td>
+</tr>
+<tr>
+<td><code>omniguard.creative</code></td>
+<td>false</td>
+<td>May be in creative without being a trusted operator</td>
+</tr>
+</tbody>
+</table></div>
+    </article>
+    <nav class="pager"><a class="pn prev" href="configuration.html"><small>Previous</small>Configuration</a><a class="pn next" href="checks.html"><small>Next</small>All checks</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#permissions">Permissions</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

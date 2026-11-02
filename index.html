@@ -2,36 +2,226 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OmniGuard Wiki</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="OmniGuard: all-in-one Minecraft server security. Packet firewall, real dupe detection, lag-machine shield, bot-flood protection.">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/themes/vue.css">
-  <style>
-    :root { --theme-color: #1f9bb5; }
-    .sidebar > h1 a { color: var(--theme-color); font-weight: 700; }
-    table { display: table; width: 100%; }
-    .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; }
-    .b-packet { background: #e74c3c; } .b-dupe { background: #8e44ad; } .b-world { background: #f39c12; }
-    .b-conn { background: #3498db; } .b-server { background: #c9a50a; }
-  </style>
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="assets/omniguard-256.png">
+  <meta property="og:image" content="assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <title>OmniGuard — Minecraft server security: anti-crash, real dupe detection, anti-lag, anti-bot</title>
+  <meta name="description" content="One plugin, five layers: packet firewall, Item Provenance Ledger dupe detection, lag-machine shield, bot-flood protection and server hardening. Paper, Purpur, Spigot and Folia 1.17–26.x.">
 </head>
-<body>
-  <div id="app">Loading…</div>
-  <script>
-    window.$docsify = {
-      name: 'OmniGuard',
-      loadSidebar: true,
-      subMaxLevel: 2,
-      auto2top: true,
-      search: { placeholder: 'Search the wiki', noData: 'No results', depth: 3 },
-      copyCode: { buttonText: 'Copy', successText: 'Copied' }
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/docsify.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/plugins/search.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@3.0.0/dist/docsify-copy-code.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-java.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<body data-root="">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="index.html"><img src="assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="index.html#features" class="active">Features</a>
+    <a href="docs/index.html">Docs</a>
+    <a href="docs/api.html">API</a>
+    <a href="docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="pill"><span class="dot"></span>v1.5.0 · 37/37 exploits blocked · 0 false positives</span>
+      <h1>Your server.<br><span class="grad">Protected from every angle.</span></h1>
+      <p class="lead">OmniGuard stops crash exploits before they are decoded, catches duplicated items <em>however</em> they were made,
+        freezes lag machines and survives bot floods. It does all this without ever punishing the ten friends who share one IP.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://builtbybit.com/resources/minecraft/plugins/protection/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 19h16"/></svg>Get OmniGuard</a>
+        <a class="btn btn-ghost" href="docs/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>Read the docs</a>
+      </div>
+      <div class="hero-meta">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>Paper · Purpur · Spigot · Folia</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>1.17.1 → 26.x</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>Geyser / Bedrock ready</span>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="orbit"><i></i></div>
+      <div class="orbit o2"><i></i></div>
+      <img class="hero-logo" src="assets/omniguard-mark.svg" alt="">
+      <div class="terminal"><div class="bar"><i></i><i></i><i></i></div><div class="log" id="log"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="stats reveal">
+  <div class="stat"><b>37<em>/37</em></b><span>real exploits blocked in the live test suite</span></div>
+  <div class="stat"><b>0</b><span>false positives on legitimate players</span></div>
+  <div class="stat"><b>35</b><span>protections, each one configurable</span></div>
+  <div class="stat"><b>6</b><span>server platforms tested every release</span></div>
+</div>
+
+<section class="block" id="features">
+  <div class="eyebrow">Five layers, one plugin</div>
+  <h2>Everything that can take a server down, covered.</h2>
+  <p class="sub">Most servers run three or four separate plugins for this. OmniGuard replaces them with one engine
+    that shares its knowledge: a flood seen by the network layer tightens the login guard, a punished player shows up
+    in the ban-evasion map, and every decision lands in one alert stream.</p>
+  <div class="layers">
+    <div class="card reveal">
+      <div class="ic c-packet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+      <h3>Packet firewall</h3>
+      <p>Checks run on the network thread, so malicious packets are dropped before the server does any work on them.</p>
+      <ul><li>Book exploits, NaN and out-of-world movement</li><li>Click, slot and creative item exploits</li><li>Crash commands and selector bombs</li><li>Byte and frame floods cut <em>before decoding</em></li></ul>
+    </div>
+    <div class="card reveal">
+      <div class="ic c-dupe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></div>
+      <h3>Real dupe detection</h3>
+      <p>The Item Provenance Ledger gives every valuable item an invisible identity. Two copies of one identity means a dupe, whatever exploit made it.</p>
+      <ul><li>Chain of custody for every item</li><li>Verified on the right thread (Folia-safe)</li><li>Gain monitor for diamonds and netherite</li><li>Patches for known dupe vectors</li></ul>
+    </div>
+    <div class="card reveal">
+      <div class="ic c-world"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+      <h3>Lag-machine shield</h3>
+      <p>Per-chunk limits for the contraptions that kill TPS. They tighten by themselves when the server struggles.</p>
+      <ul><li>Redstone, piston and hopper floods</li><li>Entity caps (items, minecarts, frames…)</li><li>Explosion and chunk-generation floods</li><li>Chunk-ban and book-ban protection</li></ul>
+    </div>
+    <div class="card reveal">
+      <div class="ic c-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1"/></svg></div>
+      <h3>Connection shield</h3>
+      <p>Bot floods are absorbed and real players keep playing. Attack mode switches on and off by itself.</p>
+      <ul><li>Connection and login floods</li><li>One-time reconnect check for unknown IPs</li><li>Ban-evasion links and rejoin cycling</li><li>One-command lockdown</li></ul>
+    </div>
+    <div class="card wide reveal">
+      <div class="ic c-server"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <h3>Server hardening</h3>
+      <p>The attacks that do not come through packets: a backdoored plugin quietly giving someone OP, an exploit kit
+        reading your plugin list, a forgotten RCON password.</p>
+      <ul><li>Untrusted operators de-opped within seconds</li><li>Plugin list and server version hidden from players</li><li><code>/og doctor</code> audits your configuration</li><li>Illegal items detected (enchant 32767, 127-stacks)</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="eyebrow">Only in OmniGuard</div>
+  <h2>Things other security plugins simply do not do.</h2>
+  <p class="sub">Features built for the hard problems: how to catch every dupe, how to keep limits tight without hurting
+    real players, and how to settle a ban appeal with evidence.</p>
+  <div class="unique">
+    <div class="feature reveal">
+      <h3>Chain of custody</h3>
+      <p>Every tracked item remembers who held it. A dupe alert tells you where the copy came from, not just that it exists.</p>
+      <div class="chain"><span>player Steve</span><i>→</i><span>chest 10 64 -3</span><i>→</i><span>player Alex</span><i>+</i><span class="bad">copy in player Bob</span></div>
+    </div>
+    <div class="feature reveal">
+      <h3>Auto-Tune</h3>
+      <p>OmniGuard learns what normal traffic looks like on <em>your</em> server, using only players who were never flagged, and turns it into tight per-packet limits.</p>
+      <div class="bars">
+        <div class="row">POSITION<div class="track"><div class="now" style="width:100%"></div><div class="learned" style="width:40%"></div></div></div>
+        <div class="row">CLICK_WINDOW<div class="track"><div class="now" style="width:100%"></div><div class="learned" style="width:45%"></div></div></div>
+        <div class="row">CHAT_COMMAND<div class="track"><div class="now" style="width:100%"></div><div class="learned" style="width:30%"></div></div></div>
+      </div>
+    </div>
+    <div class="feature reveal">
+      <h3>Packet forensics</h3>
+      <p>Every punishment saves the connection's last 64 packets as an evidence file. A ban appeal takes a minute to settle.</p>
+      <div class="demo">check  : <span class="k">book</span>
+detail : book too large (412008 > 320000 bytes)
+<span class="y">-456.4 ms</span>  TELEPORT_CONFIRM          1 B
+<span class="y">-455.7 ms</span>  PLAYER_LOADED             0 B
+<span class="y">   0.0 ms</span>  EDIT_BOOK            412008 B  <span class="r">BLOCKED</span></div>
+    </div>
+    <div class="feature reveal">
+      <h3>Proof on every release</h3>
+      <p>An automated harness replays real exploit payloads against a real server while two legitimate players stay online. Nothing ships unless every attack is handled and nobody legitimate is touched.</p>
+      <div class="demo"><span class="g">BLOCKED </span> Book ban: 18 large books in one inventory
+<span class="g">BLOCKED </span> 500 logins from 100 IPs in 4 s
+<span class="g">BLOCKED </span> Tracked elytra duplicated into a chest
+<span class="k">LEGIT-OK</span> 10 players on one IP join together
+<span class="k">LEGIT-OK</span> Bedrock player ".Steve" joins</div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="eyebrow">Fair by design</div>
+  <h2>Strict with attackers. Never with your players.</h2>
+  <p class="sub">A security plugin that kicks real players is worse than none. These rules are part of the test
+    suite, so they cannot quietly break.</p>
+  <div class="fair">
+    <div class="item reveal"><div class="ic c-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9H3z"/><path d="M9 20v-6h6v6"/></svg></div><b>Shared IPs welcome</b><span>Families, schools, cafés and mobile NAT. IPs that real players used are trusted and never blocked.</span></div>
+    <div class="item reveal"><div class="ic c-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div><b>Bedrock friendly</b><span>Floodgate names and Geyser-translated input are understood, never flagged.</span></div>
+    <div class="item reveal"><div class="ic c-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><b>Any language</b><span>Long books and signs in Turkish, Chinese or Arabic are fine. Only impossible ones are refused.</span></div>
+    <div class="item reveal"><div class="ic c-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><b>Monitor mode</b><span>Observe for a day, tune, then enforce. Violation levels cool down; one odd packet never kicks.</span></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="eyebrow">At a glance</div>
+  <h2>What you get, compared with a typical anti-exploit plugin.</h2>
+  <p class="sub">A typical anti-exploit plugin covers crash packets. OmniGuard covers the whole attack surface of a Minecraft server.</p>
+  <div class="compare reveal">
+    <table>
+      <thead><tr><th>Capability</th><th>Typical anti-exploit</th><th class="us">OmniGuard</th></tr></thead>
+      <tbody>
+        <tr><td>Crash-packet protection</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>Byte / frame floods dropped before decoding</td><td class="part">some</td><td class="yes">✔</td></tr>
+        <tr><td>Dupe detection that works for unknown dupes</td><td class="no">—</td><td class="yes">✔</td></tr>
+        <tr><td>Chain of custody for valuable items</td><td class="no">—</td><td class="yes">✔</td></tr>
+        <tr><td>Lag-machine and chunk-ban protection</td><td class="part">some</td><td class="yes">✔</td></tr>
+        <tr><td>Bot-flood attack mode with reconnect check</td><td class="no">—</td><td class="yes">✔</td></tr>
+        <tr><td>Ban-evasion links, OP backdoor protection</td><td class="no">—</td><td class="yes">✔</td></tr>
+        <tr><td>Limits learned from your own traffic</td><td class="no">—</td><td class="yes">✔</td></tr>
+        <tr><td>Evidence file for every punishment</td><td class="part">logs</td><td class="yes">✔</td></tr>
+        <tr><td>Developer API with events and exemptions</td><td class="part">some</td><td class="yes">✔</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block">
+  <div class="eyebrow">Runs where you run</div>
+  <h2>Tested on every platform, every release.</h2>
+  <p class="sub">Folia support is real: all world access goes through region and entity schedulers, and dupe verification double-checks across threads.</p>
+  <div class="platforms reveal"><span>Paper 1.17.1</span><span>Paper 1.20.4</span><span>Paper 1.21.11</span><span>Paper 26.1</span><span>Folia 1.21.11</span><span>Folia 26.1</span><span>Purpur</span><span>Spigot</span><span>Geyser / Floodgate</span><span>ViaVersion</span><span>PlaceholderAPI</span></div>
+</section>
+
+<section class="block">
+  <div class="eyebrow">Questions</div>
+  <h2>Frequently asked.</h2>
+  <div class="faq">
+    <details class="reveal"><summary>Does OmniGuard replace my anticheat?</summary><p>No. OmniGuard protects the <em>server</em>: crashes, dupes, lag, floods and takeovers. Run it next to your anticheat. Anticheats can even report their detections into OmniGuard's alerts and Discord through the API.</p></details>
+    <details class="reveal"><summary>Ten people play from my house. Will they be kicked?</summary><p>No. IPs that real players joined from are trusted: they get five times the limits and are never blocked. A whole IP is only blocked for an unmistakable flood. The test suite includes exactly this scenario.</p></details>
+    <details class="reveal"><summary>What does it need?</summary><p>Java 17+, a Paper, Purpur, Spigot or Folia server from 1.17.1 to 26.x, and the free <a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> plugin.</p></details>
+    <details class="reveal"><summary>Can I try it without risk?</summary><p>Yes. Turn on <code>monitor-mode</code> and OmniGuard detects and alerts on everything without blocking anything. Run <code>/og doctor</code> for a configuration check-up.</p></details>
+    <details class="reveal"><summary>I am behind BungeeCord or Velocity.</summary><p>It is detected automatically. Per-IP connection limits step aside, because all traffic comes from the proxy. Everything else keeps working with the forwarded player IPs.</p></details>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-box reveal">
+    <img src="assets/omniguard-mark.svg" alt="" style="width:76px;margin:0 auto 18px">
+    <h2>Ready when the next exploit drops.</h2>
+    <p>Install in two minutes, start in monitor mode, and let OmniGuard learn your server.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://builtbybit.com/resources/minecraft/plugins/protection/">Get OmniGuard</a>
+      <a class="btn btn-ghost" href="docs/installation.html">Installation guide</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div>© OmniGuard · v1.5.0</div>
+  <nav><a href="docs/index.html">Documentation</a><a href="docs/api.html">Developer API</a><a href="docs/testing.html">Test results</a><a href="docs/faq.html">FAQ</a></nav>
+</footer>
+<script src="assets/app.js"></script>
 </body>
 </html>

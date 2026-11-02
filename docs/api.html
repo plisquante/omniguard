@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Developer API · OmniGuard Docs</title>
+  <meta name="description" content="Developer API OmniGuard exposes a typed service in Bukkit&#x27;s ServicesManager , plus Bukkit events. A complete, compiling example plugin is in examples/api-e">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html" class="active">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="developer-api">Developer API<a class="anchor" href="#developer-api" title="Permanent link">#</a></h1>
+<p>OmniGuard exposes a typed service in Bukkit's <code>ServicesManager</code>, plus Bukkit events. A complete, compiling example
+plugin is in <a href="https://github.com/plisquante/OmniGuard/tree/main/examples/api-example"><code>examples/api-example</code></a>.</p>
+<h2 id="setup">Setup<a class="anchor" href="#setup" title="Permanent link">#</a></h2>
+<p>Add the OmniGuard jar to your compile classpath (scope <code>provided</code> / <code>compileOnly</code>) and declare the dependency:</p>
+<div class="hl"><pre><span></span><code><span class="c1"># plugin.yml</span>
+<span class="nt">depend</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">OmniGuard</span><span class="p p-Indicator">]</span><span class="w">        </span><span class="c1"># or softdepend</span>
+</code></pre></div>
+
+<div class="hl"><pre><span></span><code><span class="n">OmniGuardService</span><span class="w"> </span><span class="n">og</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bukkit</span><span class="p">.</span><span class="na">getServicesManager</span><span class="p">().</span><span class="na">load</span><span class="p">(</span><span class="n">OmniGuardService</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">og</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// OmniGuard not installed</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="callout warn">
+<p>Only use classes in <code>dev.omniguard.api</code> and <code>dev.omniguard.api.event</code>. Everything else is internal and may change.</p>
+</div>
+<h2 id="omniguardservice">OmniGuardService<a class="anchor" href="#omniguardservice" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>version()</code></td>
+<td>Plugin version</td>
+</tr>
+<tr>
+<td><code>isAttackMode()</code> / <code>setAttackMode("auto"\|"on"\|"off")</code></td>
+<td>Attack mode</td>
+</tr>
+<tr>
+<td><code>isMonitorMode()</code></td>
+<td>Detect-only mode</td>
+</tr>
+<tr>
+<td><code>isLockdown()</code> / <code>setLockdown(boolean)</code></td>
+<td>Lockdown</td>
+</tr>
+<tr>
+<td><code>stats()</code></td>
+<td><code>StatsSnapshot(packets, blocked, kicks, refusedConnections, dupes, packetsPerSecond, blockedPerSecond, trackedItems)</code></td>
+</tr>
+<tr>
+<td><code>checks()</code></td>
+<td>Map of check id → enabled</td>
+</tr>
+<tr>
+<td><code>getViolationLevel(uuid, checkId)</code> / <code>getViolations(uuid)</code></td>
+<td>Current violation levels</td>
+</tr>
+<tr>
+<td><code>exempt(uuid, checkId, Duration)</code></td>
+<td>Temporary exemption from one check, or <code>"*"</code> for all</td>
+</tr>
+<tr>
+<td><code>clearExemptions(uuid)</code> / <code>isExempt(uuid, checkId)</code></td>
+<td>Manage exemptions</td>
+</tr>
+<tr>
+<td><code>reportViolation(player, source, detail, amount)</code></td>
+<td>Feed your own detections into OmniGuard's alerts, Discord, logs and the <code>external</code> check's punishments</td>
+</tr>
+<tr>
+<td><code>getLinkedAccounts(name)</code></td>
+<td>Accounts that shared an IP</td>
+</tr>
+<tr>
+<td><code>getItemIdentity(item)</code></td>
+<td>Ledger identity of an item</td>
+</tr>
+<tr>
+<td><code>trackItem(item)</code></td>
+<td>Give an item an identity now (e.g. crate rewards); call on the item's owning thread</td>
+</tr>
+<tr>
+<td><code>getCustody(uuid)</code></td>
+<td>Chain of custody (<code>CustodyStep(timeMillis, holder)</code>)</td>
+</tr>
+<tr>
+<td><code>isCompromised(uuid)</code></td>
+<td>Whether the identity was confirmed duplicated</td>
+</tr>
+</tbody>
+</table></div>
+<p>All methods are thread-safe except <code>trackItem</code>. Unknown check ids throw <code>IllegalArgumentException</code>.</p>
+<h2 id="examples">Examples<a class="anchor" href="#examples" title="Permanent link">#</a></h2>
+<h3 id="exempt-a-player-during-your-launch-pad">Exempt a player during your launch pad<a class="anchor" href="#exempt-a-player-during-your-launch-pad" title="Permanent link">#</a></h3>
+<div class="hl"><pre><span></span><code><span class="n">og</span><span class="p">.</span><span class="na">exempt</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="na">getUniqueId</span><span class="p">(),</span><span class="w"> </span><span class="s">"invalid-movement"</span><span class="p">,</span><span class="w"> </span><span class="n">Duration</span><span class="p">.</span><span class="na">ofSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+<span class="n">player</span><span class="p">.</span><span class="na">setVelocity</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Vector</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">));</span>
+</code></pre></div>
+
+<h3 id="report-your-own-detection">Report your own detection<a class="anchor" href="#report-your-own-detection" title="Permanent link">#</a></h3>
+<div class="hl"><pre><span></span><code><span class="n">og</span><span class="p">.</span><span class="na">reportViolation</span><span class="p">(</span><span class="n">player</span><span class="p">,</span><span class="w"> </span><span class="s">"MyAntiCheat"</span><span class="p">,</span><span class="w"> </span><span class="s">"reach 6.2 blocks"</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="track-crate-rewards">Track crate rewards<a class="anchor" href="#track-crate-rewards" title="Permanent link">#</a></h3>
+<div class="hl"><pre><span></span><code><span class="n">ItemStack</span><span class="w"> </span><span class="n">reward</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ItemStack</span><span class="p">(</span><span class="n">Material</span><span class="p">.</span><span class="na">NETHERITE_SWORD</span><span class="p">);</span>
+<span class="n">UUID</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">og</span><span class="p">.</span><span class="na">trackItem</span><span class="p">(</span><span class="n">reward</span><span class="p">);</span>
+<span class="n">player</span><span class="p">.</span><span class="na">getInventory</span><span class="p">().</span><span class="na">addItem</span><span class="p">(</span><span class="n">reward</span><span class="p">);</span>
+</code></pre></div>
+
+<h2 id="events">Events<a class="anchor" href="#events" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Cancellable</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OmniGuardViolationEvent</code></td>
+<td>yes (suppresses alert and punishment)</td>
+<td>Every failed check</td>
+</tr>
+<tr>
+<td><code>OmniGuardPunishEvent</code></td>
+<td>yes (handle punishment yourself)</td>
+<td>Right before a kick or punishment commands</td>
+</tr>
+<tr>
+<td><code>OmniGuardDupeEvent</code></td>
+<td>yes (no confiscation, no alert)</td>
+<td>A duplicate is confirmed</td>
+</tr>
+<tr>
+<td><code>OmniGuardAttackModeEvent</code></td>
+<td>no</td>
+<td>Attack mode starts or stops</td>
+</tr>
+</tbody>
+</table></div>
+<div class="callout warn">
+<p>Violation and punish events may be <strong>asynchronous</strong> because packet checks run on Netty threads. Use the scheduler before touching the world. Cancelling never lets the malicious packet through.</p>
+</div>
+<div class="hl"><pre><span></span><code><span class="nd">@EventHandler</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onPunish</span><span class="p">(</span><span class="n">OmniGuardPunishEvent</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getCheckId</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="s">"packet-rate"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="na">setCancelled</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span><span class="w">                         </span><span class="c1">// no kick from OmniGuard…</span>
+<span class="w">        </span><span class="n">jail</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="na">getPlayerId</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="na">getDetail</span><span class="p">());</span><span class="w">    </span><span class="c1">// …your own handling</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="static-helper">Static helper<a class="anchor" href="#static-helper" title="Permanent link">#</a></h2>
+<p><code>OmniGuardAPI</code> (static) still exists for quick reads: <code>isAttackMode()</code>, <code>getViolationLevel(...)</code>,
+<code>getBlockedCount(...)</code>, <code>getItemIdentity(...)</code>, and <code>service()</code>, which returns the full <code>OmniGuardService</code>.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="placeholders.html"><small>Previous</small>PlaceholderAPI</a><a class="pn next" href="faq.html"><small>Next</small>FAQ & troubleshooting</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#setup">Setup</a><a href="#omniguardservice">OmniGuardService</a><a href="#examples">Examples</a><a href="#events">Events</a><a href="#static-helper">Static helper</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Server hardening · OmniGuard Docs</title>
+  <meta name="description" content="Server hardening Privilege guard ( privilege-guard ) privilege-guard : trusted-operators : [ YourName , 069a79f4-44e9-4726-a5be-fca90e38aaf5 ] enforce-crea">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html" class="active">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="server-hardening">Server hardening<a class="anchor" href="#server-hardening" title="Permanent link">#</a></h1>
+<h2 id="privilege-guard-privilege-guard">Privilege guard (<code>privilege-guard</code>)<a class="anchor" href="#privilege-guard-privilege-guard" title="Permanent link">#</a></h2>
+<div class="hl"><pre><span></span><code><span class="w">  </span><span class="nt">privilege-guard</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">trusted-operators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">YourName</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">069a79f4-44e9-4726-a5be-fca90e38aaf5</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">enforce-creative</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>Anyone with OP who is not listed is de-opped within seconds and alerted on. With <code>enforce-creative: true</code>,
+untrusted players are also kept out of creative and spectator unless they have <code>omniguard.creative</code>. It is off by
+default because creative and plot servers need creative mode. This stops the classic backdoor plugin
+(<code>/op</code> through a hidden command) and stolen staff accounts. <strong>While the list is empty the guard does nothing.</strong></p>
+<h2 id="fingerprint-guard-fingerprint">Fingerprint guard (<code>fingerprint</code>)<a class="anchor" href="#fingerprint-guard-fingerprint" title="Permanent link">#</a></h2>
+<p>Hides <code>/plugins</code>, <code>/version</code>, <code>/?</code>, <code>/bukkit</code>, <code>/paper</code>, <code>/timings</code>… and the server's own namespaces
+(<code>/minecraft:…</code>, <code>/bukkit:…</code>, <code>/spigot:…</code>, <code>/paper:…</code>) from players. The commands are also removed from tab-completion.
+Plugin namespaces stay usable, because many plugins use them in clickable chat buttons. Exploit kits use this
+information to pick an exploit.</p>
+<h2 id="og-doctor"><code>/og doctor</code><a class="anchor" href="#og-doctor" title="Permanent link">#</a></h2>
+<p>Audits your setup and rates each finding CRIT / WARN / INFO:</p>
+<ul>
+<li><code>online-mode=false</code> without a proxy</li>
+<li>BungeeCord forwarding (needs a firewall) and RCON with a weak password</li>
+<li>Query enabled, command blocks enabled</li>
+<li>Operators not in <code>trusted-operators</code></li>
+<li>Monitor mode on, packet layer failed, Discord alerts off</li>
+</ul>
+    </article>
+    <nav class="pager"><a class="pn prev" href="connection.html"><small>Previous</small>Connection shield</a><a class="pn next" href="alerts.html"><small>Next</small>Alerts, Discord & reports</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#privilege-guard-privilege-guard">Privilege guard (privilege-guard)</a><a href="#fingerprint-guard-fingerprint">Fingerprint guard (fingerprint)</a><a href="#og-doctor">/og doctor</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

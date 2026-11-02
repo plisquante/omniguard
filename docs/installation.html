@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Installation · OmniGuard Docs</title>
+  <meta name="description" content="Installation Requirements Supported Server Spigot, Paper, Purpur, Folia Minecraft 1.17.1 → 26.x Java 17+ (Minecraft 26.x itself needs Java 25) Required plu">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html" class="active">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="installation">Installation<a class="anchor" href="#installation" title="Permanent link">#</a></h1>
+<h2 id="requirements">Requirements<a class="anchor" href="#requirements" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Supported</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Server</td>
+<td>Spigot, Paper, Purpur, Folia</td>
+</tr>
+<tr>
+<td>Minecraft</td>
+<td>1.17.1 → 26.x</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>17+ (Minecraft 26.x itself needs Java 25)</td>
+</tr>
+<tr>
+<td>Required plugin</td>
+<td><a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> 2.14+ (free)</td>
+</tr>
+<tr>
+<td>Works next to</td>
+<td>ViaVersion, ProtocolLib, PlaceholderAPI, LuckPerms, anticheats</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="steps">Steps<a class="anchor" href="#steps" title="Permanent link">#</a></h2>
+<ol>
+<li>Stop the server.</li>
+<li>Download <a href="https://modrinth.com/plugin/packetevents">PacketEvents</a> for your platform (Spigot/Paper build) and copy it into <code>plugins/</code>.</li>
+<li>Copy <code>OmniGuard-x.y.z.jar</code> into <code>plugins/</code>.</li>
+<li>Start the server. You should see <code>OmniGuard x.y.z enabled on Paper in … ms</code>.</li>
+<li>Run <code>/og doctor</code> in game or in the console.</li>
+</ol>
+<div class="callout warn">
+<p>Never install or update OmniGuard with <code>/reload</code> or plugin managers. Netty handlers must be injected while the server starts.</p>
+</div>
+<h2 id="bedrock-players-geyser-floodgate">Bedrock players (Geyser / Floodgate)<a class="anchor" href="#bedrock-players-geyser-floodgate" title="Permanent link">#</a></h2>
+<p>Fully supported. Floodgate name prefixes (<code>.</code> and <code>*</code> by default, see <code>login-guard.bedrock-prefixes</code>) are accepted,
+Geyser's local connections are never rate-limited, and Geyser-translated inventory clicks are not judged by
+Java-only rules.</p>
+<h2 id="behind-a-proxy-bungeecord-velocity">Behind a proxy (BungeeCord / Velocity)<a class="anchor" href="#behind-a-proxy-bungeecord-velocity" title="Permanent link">#</a></h2>
+<p><code>checks.connection-flood.behind-proxy: auto</code> detects forwarding (spigot.yml <code>bungeecord</code>, Paper Velocity settings).
+In proxy mode, per-IP connection limits switch off because all traffic comes from the proxy. Every other protection keeps working,
+including per-IP <em>login</em> limits, which use the forwarded player IP.</p>
+<h2 id="updating">Updating<a class="anchor" href="#updating" title="Permanent link">#</a></h2>
+<p>Replace the jar and restart. New config keys fall back to their defaults until you add them. <code>/og reload</code> lists
+anything it had to fall back on.</p>
+<h2 id="files">Files<a class="anchor" href="#files" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config.yml</code></td>
+<td>All settings (never rewritten by OmniGuard)</td>
+</tr>
+<tr>
+<td><code>lang/en.yml</code>, <code>lang/tr.yml</code></td>
+<td>Messages</td>
+</tr>
+<tr>
+<td><code>state.yml</code></td>
+<td>In-game toggles, learned limits, lockdown</td>
+</tr>
+<tr>
+<td><code>logs/&lt;date&gt;.log</code></td>
+<td>Every alert</td>
+</tr>
+<tr>
+<td><code>forensics/&lt;date&gt;/*.txt</code></td>
+<td>Evidence of each punishment</td>
+</tr>
+<tr>
+<td><code>reports/&lt;date&gt;.txt</code></td>
+<td>Daily security report</td>
+</tr>
+<tr>
+<td><code>ledger/</code></td>
+<td>Ignored and compromised item identities</td>
+</tr>
+<tr>
+<td><code>alts.yml</code>, <code>verified-ips.txt</code></td>
+<td>Account links, verified IPs</td>
+</tr>
+</tbody>
+</table></div>
+    </article>
+    <nav class="pager"><a class="pn prev" href="index.html"><small>Previous</small>Overview</a><a class="pn next" href="configuration.html"><small>Next</small>Configuration</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#requirements">Requirements</a><a href="#steps">Steps</a><a href="#bedrock-players-geyser-floodgate">Bedrock players (Geyser / Floodgate)</a><a href="#behind-a-proxy-bungeecord-velocity">Behind a proxy (BungeeCord / Velocity)</a><a href="#updating">Updating</a><a href="#files">Files</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

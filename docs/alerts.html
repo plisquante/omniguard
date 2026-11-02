@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Alerts, Discord &amp; reports · OmniGuard Docs</title>
+  <meta name="description" content="Alerts, Discord &amp; reports Where alerts go Channel Setting Staff in game (hover for details, click to /og inspect ) alerts.staff , permission omniguard.aler">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html" class="active">Alerts, Discord & reports</a>
+<a href="auto-tune.html">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="alerts-discord-reports">Alerts, Discord &amp; reports<a class="anchor" href="#alerts-discord-reports" title="Permanent link">#</a></h1>
+<h2 id="where-alerts-go">Where alerts go<a class="anchor" href="#where-alerts-go" title="Permanent link">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Staff in game (hover for details, click to <code>/og inspect</code>)</td>
+<td><code>alerts.staff</code>, permission <code>omniguard.alerts</code>, toggle <code>/og alerts</code></td>
+</tr>
+<tr>
+<td>Console (ASCII-safe for any host)</td>
+<td><code>alerts.console</code></td>
+</tr>
+<tr>
+<td><code>logs/&lt;date&gt;.log</code> (kept <code>keep-days</code>)</td>
+<td><code>alerts.file-log</code></td>
+</tr>
+<tr>
+<td>Discord</td>
+<td><code>discord.*</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The same alert (same player and check) is not repeated within <code>alerts.cooldown-millis</code>.</p>
+<h2 id="discord">Discord<a class="anchor" href="#discord" title="Permanent link">#</a></h2>
+<div class="hl"><pre><span></span><code><span class="nt">discord</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">webhook-url</span><span class="p">:</span><span class="w"> </span><span class="s">"https://discord.com/api/webhooks/…"</span>
+<span class="w">  </span><span class="nt">categories</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">PACKET</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">DUPE</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">WORLD</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">CONNECTION</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">SERVER</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">attack-mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">mention-role-id</span><span class="p">:</span><span class="w"> </span><span class="s">"123456789012345678"</span><span class="w">   </span><span class="c1"># pinged on dupes and attack mode</span>
+</code></pre></div>
+
+<p>Embeds are batched (up to 10 per request), Discord's 429 <code>retry_after</code> is respected, and during alert storms the
+oldest entries are dropped with a notice. <code>@everyone</code> can never be triggered (<code>allowed_mentions</code>).</p>
+<h2 id="daily-report">Daily report<a class="anchor" href="#daily-report" title="Permanent link">#</a></h2>
+<p><code>reports/&lt;date&gt;.txt</code>, also posted to Discord when <code>daily-report.discord: true</code>:</p>
+<div class="hl"><pre><span></span><code>OmniGuard daily security report — 2026-11-02
+packets inspected : 18342210
+actions blocked   : 4211
+players kicked    : 7
+connections refused: 980
+dupes caught      : 1
+attack-mode events: 2
+top checks:
+  connection-flood: 980
+  packet-rate: 2100
+</code></pre></div>
+    </article>
+    <nav class="pager"><a class="pn prev" href="hardening.html"><small>Previous</small>Server hardening</a><a class="pn next" href="auto-tune.html"><small>Next</small>Auto-Tune & forensics</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#where-alerts-go">Where alerts go</a><a href="#discord">Discord</a><a href="#daily-report">Daily report</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>

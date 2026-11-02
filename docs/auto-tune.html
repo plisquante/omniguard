@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#060d18">
+  <link rel="icon" type="image/svg+xml" href="../assets/omniguard-mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/omniguard-32.png">
+  <link rel="apple-touch-icon" href="../assets/omniguard-256.png">
+  <meta property="og:image" content="../assets/omniguard-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
+
+  <link rel="stylesheet" href="../assets/code.css">
+  <title>Auto-Tune &amp; forensics · OmniGuard Docs</title>
+  <meta name="description" content="Auto-Tune &amp; forensics Auto-Tune Default packet limits are deliberately generous. Auto-Tune measures what your players actually send: It records packets per">
+</head>
+<body data-root="../">
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
+  <nav class="topnav">
+    <a href="../index.html#features">Features</a>
+    <a href="../docs/index.html" class="active">Docs</a>
+    <a href="../docs/api.html">API</a>
+    <a href="../docs/testing.html">Test results</a>
+  </nav>
+  <div class="top-actions">
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
+    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </div>
+</header>
+<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+
+<div class="docs">
+  <aside class="sidebar">
+<div class="nav-group"><div class="nav-title">Getting started</div>
+<a href="index.html">Overview</a>
+<a href="installation.html">Installation</a>
+<a href="configuration.html">Configuration</a>
+<a href="commands.html">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title">Protection</div>
+<a href="checks.html">All checks</a>
+<a href="packet-firewall.html">Packet firewall</a>
+<a href="item-ledger.html">Item Ledger & anti-dupe</a>
+<a href="world-shield.html">World shield</a>
+<a href="connection.html">Connection shield</a>
+<a href="hardening.html">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title">Operations</div>
+<a href="alerts.html">Alerts, Discord & reports</a>
+<a href="auto-tune.html" class="active">Auto-Tune & forensics</a>
+<a href="placeholders.html">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title">Developers</div>
+<a href="api.html">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title">Help</div>
+<a href="faq.html">FAQ & troubleshooting</a>
+<a href="testing.html">Test results</a>
+</div>
+  </aside>
+  <main class="content">
+    <article class="prose">
+<h1 id="auto-tune-forensics">Auto-Tune &amp; forensics<a class="anchor" href="#auto-tune-forensics" title="Permanent link">#</a></h1>
+<h2 id="auto-tune">Auto-Tune<a class="anchor" href="#auto-tune" title="Permanent link">#</a></h2>
+<p>Default packet limits are deliberately generous. Auto-Tune measures what <strong>your</strong> players actually send:</p>
+<ul>
+<li>It records packets per second, per packet type and per player.</li>
+<li>Only players who were <strong>never flagged</strong> on that connection contribute, so attackers cannot teach it to be lax.</li>
+<li>After <code>auto-tune.min-samples</code> player-seconds (3600 ≈ one player for an hour), <code>/og tune</code> recommends
+  <code>rate = 1.5 × p99.9</code> and <code>burst ≥ 2 × rate</code>. A recommendation is never below <code>min-rate</code>, and never below
+  25 % of the default.</li>
+<li><code>/og tune apply</code> stores the limits in <code>state.yml</code>, where they override <code>packet-rate.limits</code>. <code>/og tune reset</code> undoes it.</li>
+</ul>
+<div class="hl"><pre><span></span><code>[OmniGuard] Learned from 41 233 clean player-seconds since 3h 12m ago:
+ - PLAYER_POSITION_AND_ROTATION p99.9 21/s max 26/s | now 80/s burst 300 → 32/s burst 75
+ - CLICK_WINDOW p99.9 18/s max 140/s | now 60/s burst 400 → 27/s burst 210
+</code></pre></div>
+
+<h2 id="packet-forensics">Packet forensics<a class="anchor" href="#packet-forensics" title="Permanent link">#</a></h2>
+<p>When a player is punished, <code>forensics/&lt;date&gt;/&lt;player&gt;-&lt;time&gt;.txt</code> is written:</p>
+<div class="hl"><pre><span></span><code>OmniGuard incident report
+player : Atk1
+client : 1.21.11 / vanilla
+check  : book
+detail : book too large (122880 &gt; 120000 bytes)
+
+Last 4 packets (oldest first, ms relative to the last one):
+   -456.4 ms  TELEPORT_CONFIRM                        1 B
+   -456.0 ms  PLAYER_POSITION_AND_ROTATION           33 B
+   -455.7 ms  PLAYER_LOADED                           0 B
+      0.0 ms  EDIT_BOOK                          307403 B  BLOCKED
+</code></pre></div>
+
+<p>Use these files to answer ban appeals in a minute.</p>
+    </article>
+    <nav class="pager"><a class="pn prev" href="alerts.html"><small>Previous</small>Alerts, Discord & reports</a><a class="pn next" href="placeholders.html"><small>Next</small>PlaceholderAPI</a></nav>
+    <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
+  </main>
+  <aside class="toc"><div class="label">On this page</div><a href="#auto-tune">Auto-Tune</a><a href="#packet-forensics">Packet forensics</a></aside>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>
