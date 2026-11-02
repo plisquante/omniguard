@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OmniGuard Wiki</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OmniGuard: all-in-one Minecraft server security. Packet firewall, real dupe detection, lag-machine shield, bot-flood protection.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/themes/vue.css">
+  <style>
+    :root { --theme-color: #1f9bb5; }
+    .sidebar > h1 a { color: var(--theme-color); font-weight: 700; }
+    table { display: table; width: 100%; }
+    .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #fff; }
+    .b-packet { background: #e74c3c; } .b-dupe { background: #8e44ad; } .b-world { background: #f39c12; }
+    .b-conn { background: #3498db; } .b-server { background: #c9a50a; }
+  </style>
+</head>
+<body>
+  <div id="app">Loading…</div>
+  <script>
+    window.$docsify = {
+      name: 'OmniGuard',
+      loadSidebar: true,
+      subMaxLevel: 2,
+      auto2top: true,
+      search: { placeholder: 'Search the wiki', noData: 'No results', depth: 3 },
+      copyCode: { buttonText: 'Copy', successText: 'Copied' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/docsify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4.13.1/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@3.0.0/dist/docsify-copy-code.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-java.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+</body>
+</html>
