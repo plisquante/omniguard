@@ -34,11 +34,33 @@
     });
     var title = document.querySelector('title[data-i18n]');
     if (title) { document.title = title.textContent; }
+    document.querySelectorAll('.copy').forEach(function (b) { b.textContent = t('ui.copy', 'Copy'); });
     document.documentElement.classList.remove('i18n-pending');
     document.documentElement.classList.toggle('lang-en', lang === 'en');
   }
+  var page = document.body.getAttribute('data-page');
+  var enDoc = null;
   function loadLang(code) {
-    return fetch(root + 'assets/i18n/' + code + '.json').then(function (r) { return r.json(); });
+    var ui = fetch(root + 'assets/i18n/' + code + '.json').then(function (r) { return r.json(); });
+    if (!page) { return ui; }
+    var doc = code === 'en' ? Promise.resolve(enDoc)
+      : fetch(root + 'assets/i18n/docs/' + code + '/' + page + '.json').then(function (r) { return r.json(); });
+    return Promise.all([ui, doc]).then(function (r) { applyDoc(r[1]); return r[0]; });
+  }
+  function applyDoc(d) {
+    var art = document.querySelector('.prose');
+    var toc = document.querySelector('.toc');
+    if (!d || !art) { return; }
+    art.innerHTML = d.b;
+    if (toc) { toc.querySelectorAll('a').forEach(function (a) { a.remove(); }); toc.insertAdjacentHTML('beforeend', d.c); }
+    document.title = d.t + ' · OmniGuard Docs';
+    index = null;
+    decorate();
+    if (location.hash) { var h = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (h) { h.scrollIntoView(); } }
+  }
+  if (page) {
+    var art0 = document.querySelector('.prose');
+    enDoc = { t: (document.querySelector('.prose h1') || {}).textContent.replace(/#$/, ''), b: art0.innerHTML, c: Array.prototype.map.call(document.querySelectorAll('.toc a'), function (a) { return a.outerHTML; }).join('') };
   }
   document.documentElement.classList.toggle('lang-en', lang === 'en');
   var code = document.querySelector('.lang-code');
@@ -87,26 +109,28 @@
     window.addEventListener('resize', function () { if (window.innerWidth > 860) { setDrawer(false); } });
   }
 
-  // ── copy buttons on code blocks ──────────────────────────
+  // ── copy buttons and table-of-contents scroll spy (re-run after a translated article is swapped in) ──
+  var spy = null;
+  function decorate() {
   document.querySelectorAll('.hl').forEach(function (block) {
     var btn = document.createElement('button');
     btn.className = 'copy';
     btn.type = 'button';
-    btn.textContent = 'Copy';
+    btn.textContent = t('ui.copy', 'Copy');
     btn.addEventListener('click', function () {
       var text = block.querySelector('pre').innerText;
-      var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1400); };
+      var done = function () { btn.textContent = t('ui.copied', 'Copied'); setTimeout(function () { btn.textContent = t('ui.copy', 'Copy'); }, 1400); };
       if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done, done); } else { done(); }
     });
     block.appendChild(btn);
   });
 
-  // ── table of contents scroll spy ─────────────────────────
   var tocLinks = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
   if (tocLinks.length && 'IntersectionObserver' in window) {
     var byId = {};
     tocLinks.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
-    var spy = new IntersectionObserver(function (entries) {
+    if (spy) { spy.disconnect(); }
+    spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting && byId[en.target.id]) {
           tocLinks.forEach(function (a) { a.classList.remove('on'); });
@@ -116,6 +140,8 @@
     }, { rootMargin: '-80px 0px -70% 0px' });
     Object.keys(byId).forEach(function (id) { var h = document.getElementById(id); if (h) { spy.observe(h); } });
   }
+  }
+  decorate();
 
   // ── reveal on scroll ─────────────────────────────────────
   var reveals = document.querySelectorAll('.reveal');
@@ -164,7 +190,7 @@
   function escapeHtml(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function load() {
     if (index) { return Promise.resolve(index); }
-    return fetch(docsBase + 'search.json').then(function (r) { return r.json(); }).then(function (j) { index = j; return j; });
+    return fetch(docsBase + (lang === 'en' ? 'search.json' : 'search.' + lang + '.json')).then(function (r) { return r.json(); }).then(function (j) { index = j; return j; });
   }
   function open() {
     if (!modal) { return; }
