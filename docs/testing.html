@@ -13,6 +13,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/style.css">
+  <script>
+  /* Language: saved choice, else the browser's preferred languages, else English. Content stays hidden
+     (max 1.5 s) while a non-English dictionary loads, so visitors never see the page flip languages. */
+  (function(){var S=['en','tr','de','ru','es','pt','fr','it','nl','pl'],l=null;
+  try{l=localStorage.getItem('og-lang')}catch(e){}
+  if(S.indexOf(l)<0){l='en';var L=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'en']);
+  for(var i=0;i<L.length;i++){var c=String(L[i]).toLowerCase().split('-')[0];if(S.indexOf(c)>=0){l=c;break}}}
+  window.OG_LANG=l;document.documentElement.lang=l;
+  if(l!=='en'){document.documentElement.classList.add('i18n-pending');setTimeout(function(){document.documentElement.classList.remove('i18n-pending')},1500)}})();
+  </script>
   <script>try{var t=localStorage.getItem('og-theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'))}catch(e){document.documentElement.setAttribute('data-theme','dark')}</script>
 
   <link rel="stylesheet" href="../assets/code.css">
@@ -21,51 +31,92 @@
 </head>
 <body data-root="../">
 <header class="topbar">
-  <button class="icon-btn menu-btn" id="menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <a class="brand" href="../index.html"><img src="../assets/omniguard-mark.svg" alt=""><span>Omni<b>Guard</b></span><span class="ver">v1.5.0</span></a>
   <nav class="topnav">
-    <a href="../index.html#features">Features</a>
-    <a href="../docs/index.html" class="active">Docs</a>
-    <a href="../docs/api.html">API</a>
-    <a href="../docs/testing.html">Test results</a>
+    <a href="../index.html#features" data-i18n="top.features">Features</a>
+    <a href="../docs/index.html" class="active" data-i18n="top.docs">Docs</a>
+    <a href="../docs/api.html" data-i18n="top.api">API</a>
+    <a href="../docs/testing.html" data-i18n="top.tests">Test results</a>
   </nav>
   <div class="top-actions">
-    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search docs</span><kbd>Ctrl K</kbd></button>
-    <button class="icon-btn" id="theme" type="button" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="search-btn" data-search type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span data-i18n="top.search">Search docs</span><kbd>Ctrl K</kbd></button>
+    <div class="lang">
+      <button class="icon-btn lang-btn" id="lang" type="button" aria-haspopup="true" aria-expanded="false" data-i18n-aria="top.language" aria-label="Language"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span class="lang-code">EN</span></button>
+      <div class="lang-menu" id="lang-menu" role="menu"><button type="button" role="menuitem" data-lang="en"><b>EN</b>English</button><button type="button" role="menuitem" data-lang="tr"><b>TR</b>Türkçe</button><button type="button" role="menuitem" data-lang="de"><b>DE</b>Deutsch</button><button type="button" role="menuitem" data-lang="ru"><b>RU</b>Русский</button><button type="button" role="menuitem" data-lang="es"><b>ES</b>Español</button><button type="button" role="menuitem" data-lang="pt"><b>PT</b>Português</button><button type="button" role="menuitem" data-lang="fr"><b>FR</b>Français</button><button type="button" role="menuitem" data-lang="it"><b>IT</b>Italiano</button><button type="button" role="menuitem" data-lang="nl"><b>NL</b>Nederlands</button><button type="button" role="menuitem" data-lang="pl"><b>PL</b>Polski</button></div>
+    </div>
+    <button class="icon-btn" id="theme" type="button" data-i18n-aria="top.theme" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="icon-btn menu-btn" id="menu" type="button" aria-expanded="false" data-i18n-aria="top.menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
-<div class="search-modal" id="search" role="dialog" aria-label="Search"><div class="search-box"><input type="search" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
+<div class="drawer" id="drawer">
+  <nav class="drawer-links">
+    <a href="../index.html#features" data-i18n="top.features">Features</a>
+    <a href="../docs/index.html" data-i18n="top.docs">Docs</a>
+    <a href="../docs/api.html" data-i18n="top.api">API</a>
+    <a href="../docs/testing.html" data-i18n="top.tests">Test results</a>
+    <a class="btn btn-primary drawer-cta" href="https://builtbybit.com/resources/minecraft/plugins/protection/" data-i18n="cta.get">Get OmniGuard</a>
+  </nav>
+<div class="drawer-docs"><div class="nav-group"><div class="nav-title" data-i18n="group.Getting started">Getting started</div>
+<a href="index.html" data-i18n="nav.README">Overview</a>
+<a href="installation.html" data-i18n="nav.installation">Installation</a>
+<a href="configuration.html" data-i18n="nav.configuration">Configuration</a>
+<a href="commands.html" data-i18n="nav.commands">Commands & permissions</a>
+</div>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Protection">Protection</div>
+<a href="checks.html" data-i18n="nav.checks">All checks</a>
+<a href="packet-firewall.html" data-i18n="nav.packet-firewall">Packet firewall</a>
+<a href="item-ledger.html" data-i18n="nav.item-ledger">Item Ledger & anti-dupe</a>
+<a href="world-shield.html" data-i18n="nav.world-shield">World shield</a>
+<a href="connection.html" data-i18n="nav.connection">Connection shield</a>
+<a href="hardening.html" data-i18n="nav.hardening">Server hardening</a>
+</div>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Operations">Operations</div>
+<a href="alerts.html" data-i18n="nav.alerts">Alerts, Discord & reports</a>
+<a href="auto-tune.html" data-i18n="nav.auto-tune">Auto-Tune & forensics</a>
+<a href="placeholders.html" data-i18n="nav.placeholders">PlaceholderAPI</a>
+</div>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Developers">Developers</div>
+<a href="api.html" data-i18n="nav.api">Developer API</a>
+</div>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Help">Help</div>
+<a href="faq.html" data-i18n="nav.faq">FAQ & troubleshooting</a>
+<a href="testing.html" class="active" data-i18n="nav.testing">Test results</a>
+</div></div>
+</div>
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<div class="search-modal" id="search" role="dialog" data-i18n-aria="top.search" aria-label="Search docs"><div class="search-box"><input type="search" data-i18n-ph="search.placeholder" placeholder="Search the documentation…" aria-label="Search"><div class="results"></div></div></div>
 
 <div class="docs">
   <aside class="sidebar">
-<div class="nav-group"><div class="nav-title">Getting started</div>
-<a href="index.html">Overview</a>
-<a href="installation.html">Installation</a>
-<a href="configuration.html">Configuration</a>
-<a href="commands.html">Commands & permissions</a>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Getting started">Getting started</div>
+<a href="index.html" data-i18n="nav.README">Overview</a>
+<a href="installation.html" data-i18n="nav.installation">Installation</a>
+<a href="configuration.html" data-i18n="nav.configuration">Configuration</a>
+<a href="commands.html" data-i18n="nav.commands">Commands & permissions</a>
 </div>
-<div class="nav-group"><div class="nav-title">Protection</div>
-<a href="checks.html">All checks</a>
-<a href="packet-firewall.html">Packet firewall</a>
-<a href="item-ledger.html">Item Ledger & anti-dupe</a>
-<a href="world-shield.html">World shield</a>
-<a href="connection.html">Connection shield</a>
-<a href="hardening.html">Server hardening</a>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Protection">Protection</div>
+<a href="checks.html" data-i18n="nav.checks">All checks</a>
+<a href="packet-firewall.html" data-i18n="nav.packet-firewall">Packet firewall</a>
+<a href="item-ledger.html" data-i18n="nav.item-ledger">Item Ledger & anti-dupe</a>
+<a href="world-shield.html" data-i18n="nav.world-shield">World shield</a>
+<a href="connection.html" data-i18n="nav.connection">Connection shield</a>
+<a href="hardening.html" data-i18n="nav.hardening">Server hardening</a>
 </div>
-<div class="nav-group"><div class="nav-title">Operations</div>
-<a href="alerts.html">Alerts, Discord & reports</a>
-<a href="auto-tune.html">Auto-Tune & forensics</a>
-<a href="placeholders.html">PlaceholderAPI</a>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Operations">Operations</div>
+<a href="alerts.html" data-i18n="nav.alerts">Alerts, Discord & reports</a>
+<a href="auto-tune.html" data-i18n="nav.auto-tune">Auto-Tune & forensics</a>
+<a href="placeholders.html" data-i18n="nav.placeholders">PlaceholderAPI</a>
 </div>
-<div class="nav-group"><div class="nav-title">Developers</div>
-<a href="api.html">Developer API</a>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Developers">Developers</div>
+<a href="api.html" data-i18n="nav.api">Developer API</a>
 </div>
-<div class="nav-group"><div class="nav-title">Help</div>
-<a href="faq.html">FAQ & troubleshooting</a>
-<a href="testing.html" class="active">Test results</a>
+<div class="nav-group"><div class="nav-title" data-i18n="group.Help">Help</div>
+<a href="faq.html" data-i18n="nav.faq">FAQ & troubleshooting</a>
+<a href="testing.html" class="active" data-i18n="nav.testing">Test results</a>
 </div>
   </aside>
   <main class="content">
+    <div class="lang-notice" data-i18n="docs.notice">The technical documentation is written in English so that config keys and commands match exactly.</div>
     <article class="prose">
 <h1 id="test-results">Test results<a class="anchor" href="#test-results" title="Permanent link">#</a></h1>
 <p>Build: OmniGuard 1.5.0 with PacketEvents 2.14.0 · Paper 1.21.11 · default configuration.</p>
@@ -206,10 +257,10 @@ nobody legitimate is touched</strong>.</p>
 <p>64 unit tests cover the validators, rate limiting, the shared-IP rules, the Bedrock rules, the ledger logic,
 exemptions, the reports, and a check that the shipped configuration parses with <strong>zero</strong> problems.</p>
     </article>
-    <nav class="pager"><a class="pn prev" href="faq.html"><small>Previous</small>FAQ & troubleshooting</a><span></span></nav>
+    <nav class="pager"><a class="pn prev" href="faq.html"><small data-i18n="docs.prev">Previous</small><span data-i18n="nav.faq">FAQ & troubleshooting</span></a><span></span></nav>
     <div class="doc-footer">OmniGuard v1.5.0 · <a href="../index.html">omniguard</a></div>
   </main>
-  <aside class="toc"><div class="label">On this page</div><a href="#legitimate-players-must-never-be-punished">Legitimate players must never be punished</a><a href="#attacks-3737-handled">Attacks (37/37 handled)</a><a href="#compatibility">Compatibility</a><a href="#unit-tests">Unit tests</a></aside>
+  <aside class="toc"><div class="label" data-i18n="docs.toc">On this page</div><a href="#legitimate-players-must-never-be-punished">Legitimate players must never be punished</a><a href="#attacks-3737-handled">Attacks (37/37 handled)</a><a href="#compatibility">Compatibility</a><a href="#unit-tests">Unit tests</a></aside>
 </div>
 <script src="../assets/app.js"></script>
 </body>
